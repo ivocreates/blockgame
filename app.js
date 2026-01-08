@@ -2,6 +2,7 @@
 import { Blockchain, Block } from './blockchain.js';
 import { MathProblemGenerator } from './mathGenerator.js';
 import { FirebaseHelper } from './firebase-config.js';
+import { authManager } from './auth.js';
 
 // Gemini API Configuration
 const GEMINI_API_KEY = 'AIzaSyBVRMdnmJQjpmrUaR6-36iKVErihuMrkto';
@@ -20,8 +21,15 @@ class MathChainApp {
     }
 
     async init() {
+        // Check authentication
+        if (!authManager.isAuthenticated() && !localStorage.getItem('userId')) {
+            window.location.href = 'index.html';
+            return;
+        }
+
         // Initialize UI elements
         this.elements = {
+            navLogoutBtn: document.getElementById('navLogoutBtn'),
             profileModal: document.getElementById('profileModal'),
             profileForm: document.getElementById('profileForm'),
             profileName: document.getElementById('profileName'),
@@ -130,6 +138,14 @@ class MathChainApp {
     }
 
     setupEventListeners() {
+        // Logout button
+        if (this.elements.navLogoutBtn) {
+            this.elements.navLogoutBtn.addEventListener('click', async () => {
+                await authManager.signOutUser();
+                window.location.href = 'index.html';
+            });
+        }
+
         // Profile form submission
         this.elements.profileForm.addEventListener('submit', async (e) => {
             e.preventDefault();

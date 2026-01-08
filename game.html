@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockChain Math Miner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>MathChain</span>
+            </a>
+            <div class="nav-links">
+                <a href="game.html" class="active">Mine</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="blocks.html">Blocks</a>
+                <button class="btn btn-secondary btn-small" id="navLogoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Create Your Miner Profile</h2>
+            <p class="modal-subtitle">Join the MathChain network and start mining!</p>
+            
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="profileName">Full Name *</label>
+                    <input type="text" id="profileName" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileEmail">Email *</label>
+                    <input type="email" id="profileEmail" placeholder="your.email@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileGrade">Grade/Standard (8-12) *</label>
+                    <input type="number" id="profileGrade" placeholder="Enter your grade (8-12)" min="8" max="12" required>
+                    <span class="input-hint">Enter a number between 8 and 12</span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">
+                    Start Mining
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h1>MathChain Miner</h1>
+            </div>
+            <div class="stats">
+                <div class="stat-item">                    <span class="stat-label">Grade</span>
+                    <span class="stat-value" id="userGrade">-</span>
+                </div>
+                <div class="stat-item">                    <span class="stat-label">Chain Length</span>
+                    <span class="stat-value" id="chainLength">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Your Score</span>
+                    <span class="stat-value" id="userScore">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Mining Section -->
+            <section class="card mining-section">
+                <div class="user-info-bar">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-details">
+                        <div class="user-name" id="displayName">Guest</div>
+                        <div class="user-email" id="displayEmail">Not logged in</div>
+                    </div>
+                    <button class="btn btn-secondary btn-small" id="changeProfileBtn">Change Profile</button>
+                </div>
+                
+                <h2 class="section-title">⛏️ Mine New Block</h2>
+                
+                <div class="miner-input" style="display: none;">
+                    <label for="minerName">Your Name:</label>
+                    <input type="text" id="minerName" placeholder="Enter your miner name" maxlength="20">
+                </div>
+
+                <div class="problem-container">
+                    <div class="problem-header">
+                        <span class="problem-label">Proof of Work Challenge</span>
+                        <span class="difficulty-badge" id="difficultyBadge">Medium</span>
+                    </div>
+                    <div class="problem-display" id="problemDisplay">
+                        Loading problem...
+                    </div>
+                </div>
+
+                <div class="answer-container">
+                    <input type="text" id="answerInput" placeholder="Enter your answer" autocomplete="off">
+                    <button class="btn btn-primary" id="mineBtn">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.7 6.3L19 10.6L9 20.6L2 22L3.4 15L13.4 5C13.6 4.8 13.9 4.7 14.1 4.7C14.3 4.7 14.6 4.8 14.7 5L14.7 6.3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Mine Block
+                    </button>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+            </section>
+
+            <!-- Blockchain Visualization -->
+            <section class="card blockchain-section">
+                <h2 class="section-title">🔗 Blockchain</h2>
+                <div class="blockchain-container" id="blockchainContainer">
+                    <!-- Blocks will be added here dynamically -->
+                </div>
+            </section>
+
+            <!-- Leaderboard -->
+            <section class="card leaderboard-section">
+                <h2 class="section-title">🏆 Leaderboard</h2>
+                <div class="leaderboard-container" id="leaderboardContainer">
+                    <div class="loading">Loading leaderboard...</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Learn blockchain concepts through math! • Powered by Firebase & Gemini AI</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="blockchain.js"></script>
+    <script type="module" src="mathGenerator.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

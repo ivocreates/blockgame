@@ -3,138 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlockChain Math Miner</title>
+    <title>MathChain Miner - Learn Blockchain Through Math</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- Profile Modal -->
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <h2 class="modal-title">Create Your Miner Profile</h2>
-            <p class="modal-subtitle">Join the MathChain network and start mining!</p>
-            
-            <form id="profileForm">
-                <div class="form-group">
-                    <label for="profileName">Full Name *</label>
-                    <input type="text" id="profileName" placeholder="Enter your name" required>
+<body class="landing-page">
+    <div class="landing-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="logo-large">
+                    <svg class="logo-icon-large" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h1 class="hero-title">MathChain Miner</h1>
                 </div>
-                
-                <div class="form-group">
-                    <label for="profileEmail">Email *</label>
-                    <input type="email" id="profileEmail" placeholder="your.email@example.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="profileGrade">Grade/Standard (8-12) *</label>
-                    <input type="number" id="profileGrade" placeholder="Enter your grade (8-12)" min="8" max="12" required>
-                    <span class="input-hint">Enter a number between 8 and 12</span>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full">
-                    Start Mining
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <h1>MathChain Miner</h1>
-            </div>
-            <div class="stats">
-                <div class="stat-item">                    <span class="stat-label">Grade</span>
-                    <span class="stat-value" id="userGrade">-</span>
-                </div>
-                <div class="stat-item">                    <span class="stat-label">Chain Length</span>
-                    <span class="stat-value" id="chainLength">1</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Your Score</span>
-                    <span class="stat-value" id="userScore">0</span>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Mining Section -->
-            <section class="card mining-section">
-                <div class="user-info-bar">
-                    <div class="user-avatar" id="userAvatar">?</div>
-                    <div class="user-details">
-                        <div class="user-name" id="displayName">Guest</div>
-                        <div class="user-email" id="displayEmail">Not logged in</div>
-                    </div>
-                    <button class="btn btn-secondary btn-small" id="changeProfileBtn">Change Profile</button>
-                </div>
-                
-                <h2 class="section-title">⛏️ Mine New Block</h2>
-                
-                <div class="miner-input" style="display: none;">
-                    <label for="minerName">Your Name:</label>
-                    <input type="text" id="minerName" placeholder="Enter your miner name" maxlength="20">
-                </div>
-
-                <div class="problem-container">
-                    <div class="problem-header">
-                        <span class="problem-label">Proof of Work Challenge</span>
-                        <span class="difficulty-badge" id="difficultyBadge">Medium</span>
-                    </div>
-                    <div class="problem-display" id="problemDisplay">
-                        Loading problem...
-                    </div>
-                </div>
-
-                <div class="answer-container">
-                    <input type="text" id="answerInput" placeholder="Enter your answer" autocomplete="off">
-                    <button class="btn btn-primary" id="mineBtn">
+                <p class="hero-subtitle">Learn Blockchain Concepts Through Math Challenges</p>
+                <p class="hero-description">
+                    Experience real blockchain technology while solving grade-appropriate math problems. 
+                    Mine blocks, compete globally, and master both mathematics and distributed systems!
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-large" id="getStartedBtn">
                         <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14.7 6.3L19 10.6L9 20.6L2 22L3.4 15L13.4 5C13.6 4.8 13.9 4.7 14.1 4.7C14.3 4.7 14.6 4.8 14.7 5L14.7 6.3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        Mine Block
+                        Get Started
                     </button>
+                    <a href="leaderboard.html" class="btn btn-secondary btn-large">
+                        View Leaderboard
+                    </a>
                 </div>
-
-                <div class="feedback" id="feedback"></div>
-            </section>
-
-            <!-- Blockchain Visualization -->
-            <section class="card blockchain-section">
-                <h2 class="section-title">🔗 Blockchain</h2>
-                <div class="blockchain-container" id="blockchainContainer">
-                    <!-- Blocks will be added here dynamically -->
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-block block-1">
+                    <div class="mini-block">Block #42</div>
                 </div>
-            </section>
-
-            <!-- Leaderboard -->
-            <section class="card leaderboard-section">
-                <h2 class="section-title">🏆 Leaderboard</h2>
-                <div class="leaderboard-container" id="leaderboardContainer">
-                    <div class="loading">Loading leaderboard...</div>
+                <div class="floating-block block-2">
+                    <div class="mini-block">5x + 3 = 18</div>
                 </div>
-            </section>
-        </div>
+                <div class="floating-block block-3">
+                    <div class="mini-block">Hash: a3f2...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <h2 class="section-heading">How It Works</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>1. Sign In</h3>
+                    <p>Create your account with email or Google. Choose your grade level (8-12) to get personalized math challenges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧮</div>
+                    <h3>2. Solve Math Problems</h3>
+                    <p>Get problems tailored to your grade: algebra, geometry, trigonometry, calculus, and more. Each correct answer is your "Proof of Work".</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⛏️</div>
+                    <h3>3. Mine Blocks</h3>
+                    <p>Correct answers mine new blocks to the blockchain. Each block is cryptographically linked to the previous one with hash functions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>4. Compete Globally</h3>
+                    <p>Climb the leaderboard! Compete with students worldwide. Track your progress and become a top miner.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blockchain Concepts Section -->
+        <section class="concepts-section">
+            <h2 class="section-heading">Learn Real Blockchain Concepts</h2>
+            <div class="concepts-grid">
+                <div class="concept-item">
+                    <div class="concept-badge">PoW</div>
+                    <h4>Proof of Work</h4>
+                    <p>Solve math problems to validate blocks - just like Bitcoin miners solve computational puzzles.</p>
+                </div>
+                <div class="concept-item">
+                    <div class="concept-badge">⛓️</div>
+                    <h4>Chain Integrity</h4>
+                    <p>Each block links to the previous one through cryptographic hashes, making the chain immutable.</p>
+                </div>
+                <div class="concept-item">
+                    <div class="concept-badge">🔒</div>
+                    <h4>Immutability</h4>
+                    <p>Once mined, blocks cannot be changed. Experience the permanence of blockchain records.</p>
+                </div>
+                <div class="concept-item">
+                    <div class="concept-badge">🌐</div>
+                    <h4>Consensus</h4>
+                    <p>All miners contribute to the same shared blockchain, demonstrating distributed consensus.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Start Mining?</h2>
+            <p>Join thousands of students learning blockchain through mathematics</p>
+            <button class="btn btn-primary btn-large" id="ctaStartBtn">
+                Start Mining Now
+            </button>
+        </section>
 
         <!-- Footer -->
-        <footer class="footer">
-            <p>Learn blockchain concepts through math! • Powered by Firebase & Gemini AI</p>
+        <footer class="landing-footer">
+            <p>&copy; 2026 MathChain Miner • Powered by Firebase & Google Gemini AI</p>
+            <div class="footer-links">
+                <a href="game.html">Game</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="blocks.html">Blocks</a>
+            </div>
         </footer>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script type="module" src="firebase-config.js"></script>
-    <script type="module" src="blockchain.js"></script>
-    <script type="module" src="mathGenerator.js"></script>
-    <script type="module" src="app.js"></script>
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content auth-modal-content">
+            <button class="modal-close" id="closeAuthModal">&times;</button>
+            <h2 class="modal-title">Welcome to MathChain</h2>
+            <p class="modal-subtitle">Sign in to start mining blocks</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="signin">Sign In</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form id="signInForm" class="auth-form">
+                <div class="form-group">
+                    <label for="signInEmail">Email</label>
+                    <input type="email" id="signInEmail" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signInPassword">Password</label>
+                    <input type="password" id="signInPassword" placeholder="••••••••" required>
+                </div>
+                <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                <button type="button" class="btn btn-google" id="googleSignInBtn">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="signUpForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="signUpName">Full Name</label>
+                    <input type="text" id="signUpName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpEmail">Email</label>
+                    <input type="email" id="signUpEmail" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" id="signUpPassword" placeholder="At least 6 characters" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="signUpGrade">Grade/Standard (8-12)</label>
+                    <input type="number" id="signUpGrade" placeholder="Enter your grade" min="8" max="12" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                <button type="button" class="btn btn-google" id="googleSignUpBtn">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Sign up with Google
+                </button>
+            </form>
+
+            <!-- Password Reset Form -->
+            <form id="resetPasswordForm" class="auth-form" style="display: none;">
+                <button type="button" class="back-btn" id="backToSignIn">← Back to Sign In</button>
+                <div class="form-group">
+                    <label for="resetEmail">Email</label>
+                    <input type="email" id="resetEmail" placeholder="your.email@example.com" required>
+                </div>
+                <p class="reset-info">We'll send you a password reset link</p>
+                <button type="submit" class="btn btn-primary btn-full">Send Reset Link</button>
+            </form>
+
+            <div class="auth-feedback" id="authFeedback"></div>
+        </div>
+    </div>
+
+    <!-- Firebase and Auth Scripts -->
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="landing.js"></script>
 </body>
 </html>
