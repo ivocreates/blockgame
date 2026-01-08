@@ -8,9 +8,6 @@
   to = "/index.html"
   status = 200
 
-[build.environment]
-  NODE_VERSION = "18"
-
 [[headers]]
   for = "/*"
   [headers.values]
