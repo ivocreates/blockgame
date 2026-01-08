@@ -6,7 +6,7 @@ import { getDatabase, ref, set, get, push, query, orderByChild, limitToLast, onV
 const firebaseConfig = {
     apiKey: "AIzaSyBUpRsuU3VOZZ73bzPzB0R_MxnXPE7X8J0",
     authDomain: "blkchngaw3.firebaseapp.com",
-    databaseURL: "https://blkchngaw3-default-rtdb.firebaseio.com",
+    databaseURL: "https://blkchngaw3-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "blkchngaw3",
     storageBucket: "blkchngaw3.firebasestorage.app",
     messagingSenderId: "221546853692",
