@@ -30,40 +30,81 @@ An educational blockchain game that teaches core blockchain concepts through mat
 
 ## Setup Instructions
 
-1. **Clone or Download** the project files
+### Local Development
 
-2. **Firebase Setup**:
-   - The Firebase configuration is already included
-   - Database rules should allow read/write access for development
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/ivocreates/blockgame.git
+   cd blockgame
+   ```
 
-3. **Gemini API**:
-   - The Gemini API key is already configured
-   - Used for intelligent answer verification
+2. **Start Local Server**:
+   ```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx serve
+   ```
 
-4. **Run the Application**:
-   - Open `index.html` in a modern web browser
-   - Or use a local server (recommended):
-     ```bash
-     # Using Python
-     python -m http.server 8000
-     
-     # Using Node.js
-     npx serve
-     ```
+3. **Open Browser**: Navigate to `http://localhost:8000`
 
-5. **Start Mining**:
-   - Enter your miner name
-   - Solve the math problem
-   - Mine blocks to climb the leaderboard!
+### Deploy to Netlify
+
+#### Option 1: Deploy via Netlify CLI
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Deploy
+netlify deploy --prod
+```
+
+#### Option 2: Deploy via Netlify Dashboard
+1. Go to [Netlify](https://app.netlify.com/)
+2. Click "Add new site" → "Import an existing project"
+3. Connect to GitHub and select `ivocreates/blockgame`
+4. Build settings:
+   - **Build command**: Leave empty (or `echo 'Static site'`)
+   - **Publish directory**: `.` (root)
+5. Click "Deploy site"
+
+#### Option 3: Deploy via Git
+1. Push code to GitHub (already done)
+2. Netlify will auto-deploy on push if connected
+
+**Live Demo**: Once deployed, your site will be available at: `https://your-site-name.netlify.app`
+
+### Firebase Configuration
+
+The Firebase Realtime Database is already configured:
+- Database URL: `https://blkchngaw3-default-rtdb.firebaseio.com`
+- API Key: Included in `firebase-config.js`
+- Make sure Firebase Realtime Database rules allow read/write for development
+
+### Environment Variables (Optional)
+
+For production, consider moving API keys to environment variables:
+1. In Netlify Dashboard → Site settings → Environment variables
+2. Add `FIREBASE_API_KEY` and other sensitive keys
+3. Update code to use `process.env.FIREBASE_API_KEY`
 
 ## How to Play
 
-1. **Enter Your Name**: Type your miner name in the input field
-2. **Read the Problem**: A math challenge will be displayed
-3. **Solve It**: Calculate the answer
-4. **Submit**: Click "Mine Block" or press Enter
-5. **Earn Points**: Correct answers mine new blocks and increase your score
-6. **Compete**: Check the leaderboard to see top miners
+1. **Create Profile**: 
+   - Enter your full name (2-50 characters, letters only)
+   - Provide valid email address
+   - Input your grade/standard (8-12)
+2. **Solve Problems**: Math challenges tailored to your grade level
+3. **Mine Blocks**: Correct answers add blocks to the chain
+4. **Earn Points**: Each block increases your score
+5. **Compete**: Global leaderboard shows all miners across grades
+6. **Change Profile**: Update your details anytime via "Change Profile" button
+
+### Input Validation
+- **Name**: 2-50 characters, letters and spaces only
+- **Email**: Valid email format (user@domain.com)
+- **Grade**: Number between 8 and 12
 
 ## Blockchain Concepts Demonstrated
 
