@@ -77,10 +77,26 @@ netlify deploy --prod
 
 ### Firebase Configuration
 
-The Firebase Realtime Database is already configured:
-- Database URL: `https://blkchngaw3-default-rtdb.firebaseio.com`
-- API Key: Included in `firebase-config.js`
-- Make sure Firebase Realtime Database rules allow read/write for development
+⚠️ **IMPORTANT**: Before using the app, you must configure Firebase Realtime Database rules.
+
+The Firebase Realtime Database is already configured, but you need to set up permissions:
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Select project: **blkchngaw3**
+3. Navigate to **Realtime Database** → **Rules**
+4. Update rules to allow access (see [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions)
+
+**Quick Fix for Development:**
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+```
+
+For detailed security options and production rules, see [FIREBASE_SETUP.md](FIREBASE_SETUP.md).
 
 ### Environment Variables (Optional)
 
