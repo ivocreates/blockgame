@@ -119,10 +119,12 @@ class LeaderboardPage {
                 </td>
                 <td><span class="grade-badge">Grade ${miner.grade}</span></td>
                 <td class="blocks-cell">${miner.blocksMined}</td>
-                <td class="date-cell">${new Date(miner.lastMined).toLocaleDateString('en-IN', { 
+                <td class="date-cell">${new Date(miner.lastMined).toLocaleString('en-IN', { 
                     month: 'short', 
                     day: 'numeric',
-                    year: 'numeric'
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
                 })}</td>
             `;
             tbody.appendChild(row);

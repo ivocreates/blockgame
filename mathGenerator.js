@@ -1,4 +1,4 @@
-// Math Problem Generator for Grades 8-12 (Indian Curriculum)
+// Math Problem Generator for Grades 5-15
 
 class MathProblemGenerator {
     constructor(grade = 10) {
@@ -17,19 +17,25 @@ class MathProblemGenerator {
     }
 
     generateProblem() {
-        // Problem types based on grade
+        // Problem types based on grade - simplified for wider range
         let problemTypes = [];
 
-        if (this.grade >= 8) {
-            problemTypes.push('algebra', 'arithmetic', 'geometry', 'percentage', 'sequences');
+        if (this.grade >= 5) {
+            problemTypes.push('arithmetic', 'geometry');
+        }
+        if (this.grade >= 6) {
+            problemTypes.push('percentage', 'sequences');
+        }
+        if (this.grade >= 7) {
+            problemTypes.push('algebra');
         }
         if (this.grade >= 9) {
-            problemTypes.push('quadratic', 'powers');
+            problemTypes.push('powers');
         }
         if (this.grade >= 10) {
-            problemTypes.push('trigonometry');
+            problemTypes.push('quadratic', 'trigonometry');
         }
-        if (this.grade >= 11) {
+        if (this.grade >= 12) {
             problemTypes.push('advancedAlgebra', 'calculus');
         }
 
@@ -76,10 +82,10 @@ class MathProblemGenerator {
     }
 
     generateAlgebra() {
-        // Linear equations: ax + b = c
-        const a = Math.floor(Math.random() * 9) + 2;
-        const b = Math.floor(Math.random() * 20) - 10;
-        const x = Math.floor(Math.random() * 10) + 1;
+        // Simplified linear equations for grades 7+
+        const a = Math.floor(Math.random() * 5) + 2;  // 2-6 instead of 2-10
+        const b = Math.floor(Math.random() * 10) - 5;  // -5 to 4 instead of -10 to 9
+        const x = Math.floor(Math.random() * 8) + 1;  // 1-8 instead of 1-10
         const c = a * x + b;
 
         this.currentAnswer = x;
@@ -106,9 +112,10 @@ class MathProblemGenerator {
     generateArithmetic() {
         const operations = [
             () => {
-                const a = Math.floor(Math.random() * 50) + 10;
-                const b = Math.floor(Math.random() * 50) + 10;
-                const c = Math.floor(Math.random() * 30) + 5;
+                // Simplified addition/subtraction for grades 5+
+                const a = Math.floor(Math.random() * 30) + 10;  // 10-39
+                const b = Math.floor(Math.random() * 30) + 10;  // 10-39
+                const c = Math.floor(Math.random() * 20) + 5;   // 5-24
                 this.currentAnswer = a + b - c;
                 return {
                     question: `Calculate: ${a} + ${b} - ${c}`,
@@ -117,8 +124,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                const a = Math.floor(Math.random() * 20) + 5;
-                const b = Math.floor(Math.random() * 12) + 2;
+                // Simplified multiplication
+                const a = Math.floor(Math.random() * 12) + 3;  // 3-14
+                const b = Math.floor(Math.random() * 8) + 2;   // 2-9
                 this.currentAnswer = a * b;
                 return {
                     question: `Calculate: ${a} × ${b}`,
@@ -127,8 +135,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                const b = Math.floor(Math.random() * 12) + 2;
-                const result = Math.floor(Math.random() * 20) + 5;
+                // Simplified division
+                const b = Math.floor(Math.random() * 8) + 2;   // 2-9
+                const result = Math.floor(Math.random() * 12) + 3;  // 3-14
                 const a = b * result;
                 this.currentAnswer = result;
                 return {
@@ -145,9 +154,9 @@ class MathProblemGenerator {
     generateGeometry() {
         const problems = [
             () => {
-                // Area of rectangle
-                const length = Math.floor(Math.random() * 15) + 5;
-                const width = Math.floor(Math.random() * 15) + 5;
+                // Simplified area of rectangle
+                const length = Math.floor(Math.random() * 10) + 3;  // 3-12
+                const width = Math.floor(Math.random() * 10) + 3;   // 3-12
                 this.currentAnswer = length * width;
                 return {
                     question: `Area of rectangle (length=${length}cm, width=${width}cm)?`,
@@ -156,8 +165,8 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Perimeter of square
-                const side = Math.floor(Math.random() * 20) + 5;
+                // Simplified perimeter of square
+                const side = Math.floor(Math.random() * 12) + 3;  // 3-14
                 this.currentAnswer = 4 * side;
                 return {
                     question: `Perimeter of square with side ${side}cm?`,
@@ -166,9 +175,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Area of triangle
-                const base = Math.floor(Math.random() * 10) + 4;
-                const height = Math.floor(Math.random() * 10) + 4;
+                // Simplified area of triangle
+                const base = Math.floor(Math.random() * 8) + 4;   // 4-11
+                const height = Math.floor(Math.random() * 8) + 4; // 4-11
                 this.currentAnswer = (base * height) / 2;
                 return {
                     question: `Area of triangle (base=${base}cm, height=${height}cm)?`,
@@ -281,8 +290,9 @@ class MathProblemGenerator {
     generatePowers() {
         const problems = [
             () => {
-                const base = Math.floor(Math.random() * 8) + 2;
-                const power = Math.floor(Math.random() * 4) + 2;
+                // Simplified powers
+                const base = Math.floor(Math.random() * 5) + 2;  // 2-6
+                const power = Math.floor(Math.random() * 3) + 2; // 2-4
                 this.currentAnswer = Math.pow(base, power);
                 return {
                     question: `Calculate: ${base}^${power}`,
@@ -291,7 +301,8 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                const values = [[2, 10, 1024], [3, 5, 243], [4, 4, 256], [5, 3, 125]];
+                // Common powers
+                const values = [[2, 8, 256], [3, 4, 81], [4, 3, 64], [5, 3, 125], [2, 6, 64]];
                 const selected = values[Math.floor(Math.random() * values.length)];
                 this.currentAnswer = selected[2];
                 return {
