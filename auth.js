@@ -1,16 +1,6 @@
-// Firebase Authentication Module
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    sendPasswordResetEmail,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+// Simple Authentication Module (No Firebase Auth)
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -25,140 +15,81 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const database = getDatabase(app);
-const googleProvider = new GoogleAuthProvider();
 
-// Auth Manager Class
+// Simple Auth Manager Class
 class AuthManager {
     constructor() {
         this.currentUser = null;
-        this.setupAuthListener();
+        this.loadUserFromStorage();
     }
 
-    setupAuthListener() {
-        onAuthStateChanged(auth, async (user) => {
-            this.currentUser = user;
-            if (user) {
-                // User is signed in
-                await this.loadOrCreateUserProfile(user);
-            } else {
-                // User is signed out
-                localStorage.removeItem('userId');
-                localStorage.removeItem('userProfile');
-            }
-        });
-    }
-
-    async loadOrCreateUserProfile(user) {
-        const userId = this.sanitizeUserId(user.email || user.uid);
-        const userRef = ref(database, `users/${userId}`);
-        const snapshot = await get(userRef);
-
-        if (!snapshot.exists()) {
-            // Create new user profile
-            const defaultProfile = {
-                userId: userId,
-                name: user.displayName || 'New Miner',
-                email: user.email,
-                grade: 10,
-                blocksMined: 0,
-                createdAt: new Date().toISOString()
-            };
-            await set(userRef, defaultProfile);
-            localStorage.setItem('userProfile', JSON.stringify(defaultProfile));
-        } else {
-            localStorage.setItem('userProfile', JSON.stringify(snapshot.val()));
+    loadUserFromStorage() {
+        const userProfile = localStorage.getItem('userProfile');
+        if (userProfile) {
+            this.currentUser = JSON.parse(userProfile);
         }
-        
-        localStorage.setItem('userId', userId);
     }
 
-    sanitizeUserId(email) {
-        return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    sanitizeUserId(name) {
+        // Create a simple ID from name + timestamp
+        const timestamp = Date.now();
+        return `${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${timestamp}`;
     }
 
-    // Sign up with email/password
-    async signUpWithEmail(email, password, name, grade) {
+    // Simple registration - just name, grade, and optional email
+    async registerUser(name, grade, email = '') {
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            
-            // Create user profile
-            const userId = this.sanitizeUserId(email);
+            if (!name || !grade) {
+                return { success: false, error: 'Name and grade are required' };
+            }
+
+            const userId = this.sanitizeUserId(name);
             const userRef = ref(database, `users/${userId}`);
-            await set(userRef, {
+
+            const userProfile = {
                 userId: userId,
-                name: name,
-                email: email,
+                name: name.trim(),
+                email: email.trim(),
                 grade: parseInt(grade),
                 blocksMined: 0,
-                createdAt: new Date().toISOString()
-            });
+                createdAt: new Date().toISOString(),
+                lastActive: new Date().toISOString()
+            };
 
-            return { success: true, user: user };
+            await set(userRef, userProfile);
+            
+            // Store in localStorage
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            this.currentUser = userProfile;
+
+            return { success: true, user: userProfile };
         } catch (error) {
-            return { success: false, error: this.getErrorMessage(error) };
+            console.error('Registration error:', error);
+            return { success: false, error: error.message || 'Failed to register' };
         }
     }
 
-    // Sign in with email/password
-    async signInWithEmail(email, password) {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            return { success: true, user: userCredential.user };
-        } catch (error) {
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-
-    // Sign in with Google
-    async signInWithGoogle() {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            return { success: true, user: result.user };
-        } catch (error) {
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-
-    // Reset password
-    async resetPassword(email) {
-        try {
-            await sendPasswordResetEmail(auth, email);
-            return { success: true };
-        } catch (error) {
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-
-    // Sign out
-    async signOutUser() {
-        try {
-            await signOut(auth);
-            return { success: true };
-        } catch (error) {
-            return { success: false, error: this.getErrorMessage(error) };
-        }
-    }
-
-    // Check if user is authenticated
     isAuthenticated() {
-        return this.currentUser !== null;
+        return !!this.currentUser || !!localStorage.getItem('userId');
     }
 
-    // Get current user
     getCurrentUser() {
+        if (!this.currentUser) {
+            const userProfile = localStorage.getItem('userProfile');
+            if (userProfile) {
+                this.currentUser = JSON.parse(userProfile);
+            }
+        }
         return this.currentUser;
     }
 
-    // Get user profile from localStorage
     getUserProfile() {
         const profile = localStorage.getItem('userProfile');
         return profile ? JSON.parse(profile) : null;
     }
 
-    // Update user profile
     async updateUserProfile(userId, updates) {
         try {
             const userRef = ref(database, `users/${userId}`);
@@ -176,27 +107,13 @@ class AuthManager {
         }
     }
 
-    // Get friendly error messages
-    getErrorMessage(error) {
-        const errorMessages = {
-            'auth/email-already-in-use': 'Email is already registered. Please sign in.',
-            'auth/invalid-email': 'Invalid email address.',
-            'auth/operation-not-allowed': 'Operation not allowed. Please contact support.',
-            'auth/weak-password': 'Password should be at least 6 characters.',
-            'auth/user-disabled': 'This account has been disabled.',
-            'auth/user-not-found': 'No account found with this email.',
-            'auth/wrong-password': 'Incorrect password.',
-            'auth/invalid-credential': 'Invalid email or password.',
-            'auth/too-many-requests': 'Too many attempts. Please try again later.',
-            'auth/network-request-failed': 'Network error. Please check your connection.',
-            'auth/popup-closed-by-user': 'Sign-in popup was closed.'
-        };
-
-        return errorMessages[error.code] || error.message;
+    signOutUser() {
+        this.currentUser = null;
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userProfile');
+        return { success: true };
     }
 }
 
-// Create singleton instance
 const authManager = new AuthManager();
-
-export { authManager, auth };
+export { authManager };
