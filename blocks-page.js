@@ -11,11 +11,8 @@ class BlocksPage {
     }
 
     async init() {
-        // Check authentication
-        if (!authManager.isAuthenticated() && !localStorage.getItem('userId')) {
-            window.location.href = 'index.html';
-            return;
-        }
+        // Blocks page is public - no authentication required
+        const isAuthenticated = authManager.isAuthenticated() || localStorage.getItem('userId');
 
         this.elements = {
             blocksContainer: document.getElementById('blocksContainer'),
@@ -26,6 +23,11 @@ class BlocksPage {
             totalMiners: document.getElementById('totalMiners'),
             chainValid: document.getElementById('chainValid')
         };
+
+        // Hide logout button if not authenticated
+        if (!isAuthenticated && this.elements.logoutBtn) {
+            this.elements.logoutBtn.style.display = 'none';
+        }
 
         this.setupEventListeners();
         this.loadBlocks();
@@ -40,10 +42,12 @@ class BlocksPage {
             this.loadBlocks();
         });
 
-        this.elements.logoutBtn.addEventListener('click', async () => {
-            await authManager.signOutUser();
-            window.location.href = 'index.html';
-        });
+        if (this.elements.logoutBtn) {
+            this.elements.logoutBtn.addEventListener('click', async () => {
+                await authManager.signOutUser();
+                window.location.href = 'index.html';
+            });
+        }
     }
 
     loadBlocks() {

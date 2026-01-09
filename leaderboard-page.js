@@ -11,11 +11,8 @@ class LeaderboardPage {
     }
 
     async init() {
-        // Check authentication
-        if (!authManager.isAuthenticated() && !localStorage.getItem('userId')) {
-            window.location.href = 'index.html';
-            return;
-        }
+        // Leaderboard is public - no authentication required
+        const isAuthenticated = authManager.isAuthenticated() || localStorage.getItem('userId');
 
         this.elements = {
             leaderboardContainer: document.getElementById('leaderboardContainer'),
@@ -24,6 +21,11 @@ class LeaderboardPage {
             refreshBtn: document.getElementById('refreshBtn'),
             logoutBtn: document.getElementById('logoutBtn')
         };
+
+        // Hide logout button if not authenticated
+        if (!isAuthenticated && this.elements.logoutBtn) {
+            this.elements.logoutBtn.style.display = 'none';
+        }
 
         this.setupEventListeners();
         await this.loadLeaderboard();
@@ -49,10 +51,12 @@ class LeaderboardPage {
             this.loadLeaderboard();
         });
 
-        this.elements.logoutBtn.addEventListener('click', async () => {
-            await authManager.signOutUser();
-            window.location.href = 'index.html';
-        });
+        if (this.elements.logoutBtn) {
+            this.elements.logoutBtn.addEventListener('click', async () => {
+                await authManager.signOutUser();
+                window.location.href = 'index.html';
+            });
+        }
     }
 
     async loadLeaderboard() {
