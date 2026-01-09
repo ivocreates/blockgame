@@ -83,9 +83,9 @@ class MathProblemGenerator {
 
     generateAlgebra() {
         // Simplified linear equations for grades 7+
-        const a = Math.floor(Math.random() * 5) + 2;  // 2-6 instead of 2-10
-        const b = Math.floor(Math.random() * 10) - 5;  // -5 to 4 instead of -10 to 9
-        const x = Math.floor(Math.random() * 8) + 1;  // 1-8 instead of 1-10
+        const a = Math.floor(Math.random() * 3) + 2;  // 2-4
+        const b = Math.floor(Math.random() * 6) - 3;  // -3 to 2
+        const x = Math.floor(Math.random() * 5) + 1;  // 1-5
         const c = a * x + b;
 
         this.currentAnswer = x;
@@ -112,10 +112,10 @@ class MathProblemGenerator {
     generateArithmetic() {
         const operations = [
             () => {
-                // Simplified addition/subtraction for grades 5+
-                const a = Math.floor(Math.random() * 30) + 10;  // 10-39
-                const b = Math.floor(Math.random() * 30) + 10;  // 10-39
-                const c = Math.floor(Math.random() * 20) + 5;   // 5-24
+                // Simple addition/subtraction
+                const a = Math.floor(Math.random() * 15) + 5;   // 5-19
+                const b = Math.floor(Math.random() * 15) + 5;   // 5-19
+                const c = Math.floor(Math.random() * 10) + 2;   // 2-11
                 this.currentAnswer = a + b - c;
                 return {
                     question: `Calculate: ${a} + ${b} - ${c}`,
@@ -124,9 +124,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Simplified multiplication
-                const a = Math.floor(Math.random() * 12) + 3;  // 3-14
-                const b = Math.floor(Math.random() * 8) + 2;   // 2-9
+                // Simple multiplication
+                const a = Math.floor(Math.random() * 8) + 2;   // 2-9
+                const b = Math.floor(Math.random() * 6) + 2;   // 2-7
                 this.currentAnswer = a * b;
                 return {
                     question: `Calculate: ${a} × ${b}`,
@@ -135,9 +135,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Simplified division
-                const b = Math.floor(Math.random() * 8) + 2;   // 2-9
-                const result = Math.floor(Math.random() * 12) + 3;  // 3-14
+                // Simple division
+                const b = Math.floor(Math.random() * 6) + 2;   // 2-7
+                const result = Math.floor(Math.random() * 8) + 2;  // 2-9
                 const a = b * result;
                 this.currentAnswer = result;
                 return {
@@ -154,9 +154,9 @@ class MathProblemGenerator {
     generateGeometry() {
         const problems = [
             () => {
-                // Simplified area of rectangle
-                const length = Math.floor(Math.random() * 10) + 3;  // 3-12
-                const width = Math.floor(Math.random() * 10) + 3;   // 3-12
+                // Simple area of rectangle
+                const length = Math.floor(Math.random() * 6) + 3;  // 3-8
+                const width = Math.floor(Math.random() * 6) + 2;   // 2-7
                 this.currentAnswer = length * width;
                 return {
                     question: `Area of rectangle (length=${length}cm, width=${width}cm)?`,
@@ -165,8 +165,8 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Simplified perimeter of square
-                const side = Math.floor(Math.random() * 12) + 3;  // 3-14
+                // Simple perimeter of square
+                const side = Math.floor(Math.random() * 6) + 2;  // 2-7
                 this.currentAnswer = 4 * side;
                 return {
                     question: `Perimeter of square with side ${side}cm?`,
@@ -175,9 +175,9 @@ class MathProblemGenerator {
                 };
             },
             () => {
-                // Simplified area of triangle
-                const base = Math.floor(Math.random() * 8) + 4;   // 4-11
-                const height = Math.floor(Math.random() * 8) + 4; // 4-11
+                // Simple area of triangle (even base*height for whole numbers)
+                const base = Math.floor(Math.random() * 5) + 2;   // 2-6
+                const height = Math.floor(Math.random() * 4) * 2 + 2; // 2,4,6,8
                 this.currentAnswer = (base * height) / 2;
                 return {
                     question: `Area of triangle (base=${base}cm, height=${height}cm)?`,

@@ -6,7 +6,9 @@ class LeaderboardPage {
     constructor() {
         this.firebaseHelper = new FirebaseHelper();
         this.currentGradeFilter = 'all';
-        this.currentLimit = 10;
+        this.currentPage = 1;
+        this.itemsPerPage = 25;
+        this.allMiners = [];
         this.init();
     }
 
@@ -17,9 +19,10 @@ class LeaderboardPage {
         this.elements = {
             leaderboardContainer: document.getElementById('leaderboardContainer'),
             gradeFilter: document.getElementById('gradeFilter'),
-            limitFilter: document.getElementById('limitFilter'),
+            itemsPerPageFilter: document.getElementById('itemsPerPageFilter'),
             refreshBtn: document.getElementById('refreshBtn'),
-            logoutBtn: document.getElementById('logoutBtn')
+            logoutBtn: document.getElementById('logoutBtn'),
+            paginationContainer: document.getElementById('paginationContainer')
         };
 
         // Hide logout button if not authenticated
@@ -31,20 +34,22 @@ class LeaderboardPage {
         await this.loadLeaderboard();
 
         // Set up real-time updates
-        this.firebaseHelper.onLeaderboardUpdate((leaderboard) => {
-            this.displayLeaderboard(leaderboard);
-        }, this.currentLimit);
+        setInterval(async () => {
+            await this.loadLeaderboard(false);
+        }, 30000); // Refresh every 30 seconds
     }
 
     setupEventListeners() {
         this.elements.gradeFilter.addEventListener('change', (e) => {
             this.currentGradeFilter = e.target.value;
-            this.loadLeaderboard();
+            this.currentPage = 1;
+            this.displayCurrentPage();
         });
 
-        this.elements.limitFilter.addEventListener('change', (e) => {
-            this.currentLimit = parseInt(e.target.value);
-            this.loadLeaderboard();
+        this.elements.itemsPerPageFilter.addEventListener('change', (e) => {
+            this.itemsPerPage = parseInt(e.target.value);
+            this.currentPage = 1;
+            this.displayCurrentPage();
         });
 
         this.elements.refreshBtn.addEventListener('click', () => {
@@ -59,26 +64,44 @@ class LeaderboardPage {
         }
     }
 
-    async loadLeaderboard() {
-        this.elements.leaderboardContainer.innerHTML = '<div class="loading">Loading...</div>';
-        const leaderboard = await this.firebaseHelper.getLeaderboard(this.currentLimit);
-        this.displayLeaderboard(leaderboard);
+    async loadLeaderboard(showLoading = true) {
+        if (showLoading) {
+            this.elements.leaderboardContainer.innerHTML = '<div class="loading">Loading all miners...</div>';
+        }
+        this.allMiners = await this.firebaseHelper.getAllMiners();
+        this.displayCurrentPage();
     }
 
-    displayLeaderboard(leaderboard) {
+    getFilteredMiners() {
         // Filter by grade if needed
-        let filteredLeaderboard = leaderboard;
-        if (this.currentGradeFilter !== 'all') {
-            filteredLeaderboard = leaderboard.filter(miner => 
-                miner.grade === parseInt(this.currentGradeFilter)
-            );
+        if (this.currentGradeFilter === 'all') {
+            return this.allMiners;
         }
+        return this.allMiners.filter(miner => 
+            miner.grade === parseInt(this.currentGradeFilter)
+        );
+    }
 
-        if (filteredLeaderboard.length === 0) {
+    displayCurrentPage() {
+        const filteredMiners = this.getFilteredMiners();
+        
+        if (filteredMiners.length === 0) {
             this.elements.leaderboardContainer.innerHTML = '<div class="loading">No miners found</div>';
+            this.elements.paginationContainer.innerHTML = '';
             return;
         }
 
+        // Calculate pagination
+        const totalPages = Math.ceil(filteredMiners.length / this.itemsPerPage);
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        const pageMiners = filteredMiners.slice(startIndex, endIndex);
+
+        this.displayLeaderboard(pageMiners, filteredMiners, startIndex);
+        this.displayPagination(totalPages, filteredMiners.length);
+    }
+
+    displayLeaderboard(pageMiners, allFilteredMiners, startIndex) {
         this.elements.leaderboardContainer.innerHTML = `
             <table class="leaderboard-table">
                 <thead>
@@ -97,18 +120,18 @@ class LeaderboardPage {
 
         const tbody = document.getElementById('leaderboardBody');
         
-        filteredLeaderboard.forEach((miner, index) => {
-            const rank = index + 1;
+        pageMiners.forEach((miner, index) => {
+            const globalRank = startIndex + index + 1;
             let rankClass = '';
-            let rankDisplay = rank;
+            let rankDisplay = globalRank;
             
-            if (rank === 1) {
+            if (globalRank === 1) {
                 rankClass = 'gold';
                 rankDisplay = '🥇';
-            } else if (rank === 2) {
+            } else if (globalRank === 2) {
                 rankClass = 'silver';
                 rankDisplay = '🥈';
-            } else if (rank === 3) {
+            } else if (globalRank === 3) {
                 rankClass = 'bronze';
                 rankDisplay = '🥉';
             }
@@ -132,6 +155,75 @@ class LeaderboardPage {
                 })}</td>
             `;
             tbody.appendChild(row);
+        });
+    }
+
+    displayPagination(totalPages, totalMiners) {
+        if (totalPages <= 1) {
+            this.elements.paginationContainer.innerHTML = `
+                <div class="pagination-info">
+                    Showing all ${totalMiners} miner${totalMiners !== 1 ? 's' : ''}
+                </div>
+            `;
+            return;
+        }
+
+        let paginationHTML = `
+            <div class="pagination-info">
+                Showing ${(this.currentPage - 1) * this.itemsPerPage + 1}-${Math.min(this.currentPage * this.itemsPerPage, totalMiners)} of ${totalMiners} miners
+            </div>
+            <div class="pagination-controls">
+        `;
+
+        // Previous button
+        if (this.currentPage > 1) {
+            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage - 1}">← Previous</button>`;
+        }
+
+        // Page numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage < maxVisiblePages - 1) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 1) {
+            paginationHTML += `<button class="pagination-btn" data-page="1">1</button>`;
+            if (startPage > 2) {
+                paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const activeClass = i === this.currentPage ? 'active' : '';
+            paginationHTML += `<button class="pagination-btn ${activeClass}" data-page="${i}">${i}</button>`;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+            }
+            paginationHTML += `<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`;
+        }
+
+        // Next button
+        if (this.currentPage < totalPages) {
+            paginationHTML += `<button class="pagination-btn" data-page="${this.currentPage + 1}">Next →</button>`;
+        }
+
+        paginationHTML += `</div>`;
+        
+        this.elements.paginationContainer.innerHTML = paginationHTML;
+
+        // Add event listeners to pagination buttons
+        this.elements.paginationContainer.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.currentPage = parseInt(btn.dataset.page);
+                this.displayCurrentPage();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
     }
 }

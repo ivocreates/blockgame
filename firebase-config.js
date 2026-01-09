@@ -104,6 +104,27 @@ class FirebaseHelper {
         }
     }
 
+    // Get all miners (for pagination)
+    async getAllMiners() {
+        try {
+            const minersRef = ref(this.db, 'miners');
+            const snapshot = await get(minersRef);
+            const miners = [];
+
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    miners.push(childSnapshot.val());
+                });
+            }
+
+            // Sort by blocksMined in descending order
+            return miners.sort((a, b) => b.blocksMined - a.blocksMined);
+        } catch (error) {
+            console.error("Error fetching all miners:", error);
+            return [];
+        }
+    }
+
     // Listen to leaderboard updates in real-time
     onLeaderboardUpdate(callback, limit = 10) {
         const minersRef = ref(this.db, 'miners');
